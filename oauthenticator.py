@@ -27,9 +27,8 @@ class GitHubMixin(OAuth2Mixin):
 
 class GitHubLoginHandler(BaseHandler, GitHubMixin):
     def get(self):
-        guess_uri = '{proto}://{host}{path}'.format(
+        guess_uri = '{proto}://{path}'.format(
             proto=self.request.protocol,
-            host=self.request.host,
             path=url_path_join(
                 self.hub.server.base_url,
                 'oauth_callback'
