@@ -62,11 +62,9 @@ class GitHubOAuthHandler(BaseHandler):
 
 class GitHubOAuthenticator(Authenticator):
     
-    oauth_callback_url = Unicode('', config=True)
-    github_client_id = Unicode(os.environ.get('GITHUB_CLIENT_ID', ''),
-        config=True)
-    github_client_secret = Unicode(os.environ.get('GITHUB_CLIENT_SECRET', ''),
-        config=True)
+    oauth_callback_url = 'http://9.26.148.84:8000/hub/home'
+    github_client_id = '994b212faf1d6ef8887cf7c2b6f96e8b'
+    github_client_secret = '219d063a1fa1fd749185f5aa61e2ec40'
     
     def login_url(self, base_url):
         return url_path_join(base_url, 'oauth_login')
