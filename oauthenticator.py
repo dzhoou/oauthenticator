@@ -21,8 +21,8 @@ from jupyterhub.utils import url_path_join
 from IPython.utils.traitlets import Unicode
 
 class GitHubMixin(OAuth2Mixin):
-    _OAUTH_AUTHORIZE_URL = "http://ulv-bactoo2.ca.ibm.com:4445/oauth/login"
-    _OAUTH_ACCESS_TOKEN_URL = "http://ulv-bactoo2.ca.ibm.com:4445/access_token"
+    _OAUTH_AUTHORIZE_URL = "9.26.148.84:4445/oauth/login"
+    _OAUTH_ACCESS_TOKEN_URL = "9.26.148.84:4445/access_token"
 
 
 class GitHubLoginHandler(BaseHandler, GitHubMixin):
@@ -96,7 +96,7 @@ class GitHubOAuthenticator(Authenticator):
                 code=code
         )
         
-        url = url_concat("http://ulv-bactoo2.ca.ibm.com:4445/access_token",
+        url = url_concat("9.26.148.84:4445/access_token",
                          params)
         
         req = HTTPRequest(url,
@@ -115,7 +115,7 @@ class GitHubOAuthenticator(Authenticator):
                  "User-Agent": "JupyterHub",
                  "Authorization": "token {}".format(access_token)
         }
-        req = HTTPRequest("http://ulv-bactoo2.ca.ibm.com:4445/api/get",
+        req = HTTPRequest("9.26.148.84:4445/api/get",
                           method="GET",
                           headers=headers
                           )
