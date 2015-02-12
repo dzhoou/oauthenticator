@@ -106,7 +106,7 @@ class GitHubOAuthenticator(Authenticator):
         resp_json = json.loads(resp.body.decode('utf8', 'replace'))
         
         access_token = resp_json['access_token']
-        
+        raise gen.Return(access_token)
         # Determine who the logged in user is
 '''     headers={"Accept": "application/json",
                  "User-Agent": "JupyterHub",
@@ -121,8 +121,8 @@ class GitHubOAuthenticator(Authenticator):
         
         username = resp_json["login"]
         if self.whitelist and username not in self.whitelist:
-            username = None '''
-    raise gen.Return(access_token)
+            username = None 
+        raise gen.Return(access_token)'''
 
 
 class LocalGitHubOAuthenticator(LocalAuthenticator, GitHubOAuthenticator):
