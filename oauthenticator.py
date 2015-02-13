@@ -6,6 +6,7 @@ Most of the code c/o Kyle Kelley (@rgbkrk)
 import json
 import os
 import sys
+import MySQLdb
 
 from tornado.auth import OAuth2Mixin
 from tornado import gen, web
