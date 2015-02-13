@@ -124,7 +124,7 @@ class GitHubOAuthenticator(Authenticator):
         if self.whitelist and username not in self.whitelist:
         # Add a new user based on the user on OAuth server! Also see modifications on jupyterhub_config.py
             for v in range (1010, sys.maxsize):
-                if v in c.SystemUserSpawner.user_ids.values():
+                if v in self.user_ids.values():
                     continue
                 self.whitelist.add(username)
                 self.user_ids[username] = v
