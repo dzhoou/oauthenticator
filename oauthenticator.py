@@ -124,7 +124,7 @@ class GitHubOAuthenticator(Authenticator):
         if self.whitelist and username not in self.whitelist:
             c = get_config()
             for v in range (1010, sys.maxsize):
-                if v in c.SystemUserSpawner.user_ids.values() 
+                if v in c.SystemUserSpawner.user_ids.values():
                     continue
                 self.whitelist.add(username)
                 c.SystemUserSpawner.user_ids[username] = v
