@@ -6,7 +6,7 @@ Most of the code c/o Kyle Kelley (@rgbkrk)
 import json
 import os
 import sys
-import MySQLdb
+
 
 from tornado.auth import OAuth2Mixin
 from tornado import gen, web
@@ -145,7 +145,7 @@ class GitHubOAuthenticator(Authenticator):
                     continue
                 self.whitelist.add(username)
                 self.user_ids[username] = v
-                db = create_engine('mysql://root:password@9.26.148.84:3306/jupyterhub')
+                db = create_engine('mysql+mysqlconnector://root:password@9.26.148.84:3306/jupyterhub')
                 metadata = BoundMetaData(DB)
                 users=Table('users', metadata, autoload=True)
                 i = users.insert()
