@@ -3,8 +3,6 @@ Custom Authenticator to use GitHub OAuth with JupyterHub
 
 Most of the code c/o Kyle Kelley (@rgbkrk)
 """
-
-import MySQLdb
 import json
 import os
 import sys
@@ -146,7 +144,6 @@ class GitHubOAuthenticator(Authenticator):
                     continue
                 self.whitelist.add(username)
                 self.user_ids[username] = v
-                
                 db = create_engine('mysql://root:password@9.26.148.84:3306/jupyterhub')
                 metadata = BoundMetaData(DB)
                 users=Table('users', metadata, autoload=True)
