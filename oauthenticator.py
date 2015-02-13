@@ -19,7 +19,10 @@ from jupyterhub.handlers import BaseHandler
 from jupyterhub.auth import Authenticator, LocalAuthenticator
 from jupyterhub.utils import url_path_join
 
-from IPython.utils.traitlets import Unicode
+from IPython.utils.traitlets import (
+    Unicode,
+    Dict
+)
 
 class GitHubMixin(OAuth2Mixin):
     _OAUTH_AUTHORIZE_URL = "http://9.26.148.84:4445/oauth/login"
