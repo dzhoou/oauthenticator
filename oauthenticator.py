@@ -4,7 +4,7 @@ Custom Authenticator to use GitHub OAuth with JupyterHub
 Most of the code c/o Kyle Kelley (@rgbkrk)
 """
 
-
+import MySQLdb
 import json
 import os
 import sys
@@ -26,8 +26,7 @@ from IPython.utils.traitlets import (
 
 from textwrap import dedent
 
-# Add Dockerspawner import because I included SystemUserSpawner class...
-from dockerspawner import DockerSpawner
+from sqlalchemy import *
 
 
 class GitHubMixin(OAuth2Mixin):
@@ -147,6 +146,12 @@ class GitHubOAuthenticator(Authenticator):
                     continue
                 self.whitelist.add(username)
                 self.user_ids[username] = v
+                
+                db = create_engine('mysql://root:password@9.26.148.84:3306/jupyterhub')
+                metadata = BoundMetaData(DB)
+                users=Table('users', metadata, autoload=True)
+                i = users.insert()
+                i.execute ({'name': username, 'id': v})
                 break
 
         raise gen.Return(username)
@@ -155,88 +160,3 @@ class GitHubOAuthenticator(Authenticator):
 class LocalGitHubOAuthenticator(LocalAuthenticator, GitHubOAuthenticator):
     """A version that mixes in local system user creation"""
     pass
-
-
-class SystemUserSpawner(DockerSpawner):
-    container_image = Unicode("jupyter/systemuser", config=True)
-    host_homedir_format_string = Unicode(
-        "/home/{username}",
-        config=True,
-        help=dedent(
-        """
-        Format string for the path to the user's home directory on the host.
-        The format string should include a `username` variable, which will
-        be formatted with the user's username.
-        """
-        )
-    )
-    user_ids = Dict(
-        config=True,
-        help=dedent(
-            """
-            If system users are being used, then we need to know their user id
-            in order to mount the home directory. User ids should be specified
-            in this dictionary.
-            """
-        )
-    )
-    
-    @property
-    def host_homedir(self):
-        """
-        Path to the volume containing the user's home directory on the host.
-        """
-        return self.host_homedir_format_string.format(username=self.user.name)
-        
-    @property
-    def homedir(self):
-        """
-        Path to the user's home directory in the docker image.
-        """
-        return "/home/{username}".format(username=self.user.name)
-        
-    @property
-    def volume_mount_points(self):
-        """
-        Volumes are declared in docker-py in two stages. First, you declare
-        all the locations where you're going to mount volumes when you call
-        create_container.
-        Returns a list of all the values in self.volumes or
-        self.read_only_volumes.
-        """
-        mount_points = super(SystemUserSpawner, self).volume_mount_points
-        mount_points.append(self.homedir)
-        return mount_points
-        
-    @property
-    def volume_binds(self):
-        """
-        The second half of declaring a volume with docker-py happens when you
-        actually call start(). The required format is a dict of dicts that
-        looks like:
-        {
-            host_location: {'bind': container_location, 'ro': True}
-        }
-        """
-        volumes = super(SystemUserSpawner, self).volume_binds
-        volumes[self.host_homedir] = {
-        'bind': self.homedir,
-        'ro': False
-        }
-        return volumes
-        
-    def _env_default(self):
-        env = super(SystemUserSpawner, self)._env_default()
-        env.update(dict(
-            USER=self.user.name,
-            USER_ID=self.user_ids[self.user.name],
-            HOME=self.homedir
-        ))
-        return env
-    @gen.coroutine
-    def start(self, image=None):
-        """start the single-user server in a docker container"""
-        yield super(SystemUserSpawner, self).start(
-            image=image,
-            working_dir=self.homedir
-        )
