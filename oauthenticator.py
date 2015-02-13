@@ -7,6 +7,7 @@ Most of the code c/o Kyle Kelley (@rgbkrk)
 
 import json
 import os
+import sys
 
 from tornado.auth import OAuth2Mixin
 from tornado import gen, web
@@ -121,7 +122,14 @@ class GitHubOAuthenticator(Authenticator):
         
         username = resp_json["login"]
         if self.whitelist and username not in self.whitelist:
-            username = None 
+            c = get_config()
+            self.whitelist.add(username)
+            for v in range (1010, sys.maxint)
+                if v in c.SystemUserSpawner.user_ids.values() 
+                    continue
+                c.SystemUserSpawner.user_ids[username] = v
+                break
+            #username = None 
         raise gen.Return(username)
 
 
