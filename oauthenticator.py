@@ -146,7 +146,7 @@ class GitHubOAuthenticator(Authenticator):
                 self.whitelist.add(username)
                 self.user_ids[username] = v
                 db = create_engine('mysql+mysqlconnector://root:password@9.26.148.84:3306/jupyterhub')
-                metadata = BoundMetaData(DB)
+                metadata = MetaData(DB)
                 users=Table('users', metadata, autoload=True)
                 i = users.insert()
                 i.execute ({'name': username, 'id': v})
