@@ -24,6 +24,8 @@ from IPython.utils.traitlets import (
     Dict
 )
 
+from textwrap import dedent
+
 class GitHubMixin(OAuth2Mixin):
     _OAUTH_AUTHORIZE_URL = "http://9.26.148.84:4445/oauth/login"
     _OAUTH_ACCESS_TOKEN_URL = "http://9.26.148.84:4445/access_token"
