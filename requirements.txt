@@ -2,3 +2,4 @@
 -e git+https://github.com/ipython/ipython.git#egg=ipython[notebook]
 sqlalchemy
 simplepam
+docker-py
