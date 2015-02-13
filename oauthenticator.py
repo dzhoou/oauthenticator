@@ -65,6 +65,16 @@ class GitHubOAuthenticator(Authenticator):
     oauth_callback_url = 'http://9.26.148.84:8000/hub/oauth_callback'
     github_client_id = '994b212faf1d6ef8887cf7c2b6f96e8b'
     github_client_secret = '219d063a1fa1fd749185f5aa61e2ec40'
+    user_ids = Dict(
+        config=True,
+        help=dedent(
+            """
+            If system users are being used, then we need to know their user id
+            in order to mount the home directory. User ids should be specified
+            in this dictionary.
+            """
+        )
+    )
     
     def login_url(self, base_url):
         return url_path_join(base_url, 'oauth_login')
